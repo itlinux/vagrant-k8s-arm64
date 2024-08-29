@@ -3,6 +3,7 @@
 # change systemd to cfgroups
 # Copy Kube admin config
 echo "[TASK 1] change cgroupfs"
+sudo touch  /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 echo "\"Environment=\"KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs\" >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
 sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
@@ -45,6 +46,17 @@ EOF
 # Deploying Antrea
 su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/antrea-io/antrea/main/build/yamls/antrea.yml"
 
-# copy the config to local
-#echo "[TASK 6] Downloading the kube config"
-#vagrant ssh -c 'cat /etc/kubernetes/admin.conf' > .kube/config
+# HELM
+echo "[TASK 3] installing HELM"
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt update
+sudo apt install helm
+
+#
+# TRAEFIK
+echo "[TASK 4] adding TRAEFIK helm chart"
+su - vagrant -c "helm repo add traefik https://traefik.github.io/charts"
+su - vagrant -c "helm repo update"
+su - vagrant -c "helm show values traefik/traefikee >traefik-values.yml"
