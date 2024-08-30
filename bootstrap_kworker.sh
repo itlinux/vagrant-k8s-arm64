@@ -7,7 +7,6 @@ apt  install -y sshpass >/dev/null 2>&1
 sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 sudo systemctl restart containerd
-#sudo sed -i 's/systemd/cgroupfs/' /var/lib/kubelet/config.yaml
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 
