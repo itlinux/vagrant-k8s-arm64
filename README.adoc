@@ -24,3 +24,6 @@ Then from your machine you can use your browser to access the nginx webpage.
 ----
 curl http://10.37.129.100:8888 
 ----
+
+
+NOTE: if you are using a Mac with Apple Silicon, you need to use the arm64 images I tested with nginx and arm64v8/httpd. 
