@@ -39,3 +39,29 @@ Metallb is installed and running. The  IP address range will need to applied and
 == Traefik
 Traefik is not installed by default. It is possible to install by the helm chart as the repo has been added. The default values for it are extracted and are available in the vagrant home folder.
 
+
+
+== Steps Login
+----
+vagrant ssh kmaster
+----
+
+Running the block of IPs for your LB by changing the file metal-lb.yml. If you like the range just apply it.
+
+----
+k apply -f metal-lb.yml
+----
+
+
+Run a container with nginx and expose it on port 80
+----
+k run nginx --image=nginx
+k expose pod nginx --port 80 type=LoadBalancer
+----
+
+Check the address on services
+----
+k get svc
+----
+
+curl the address. 
