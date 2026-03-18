@@ -1,10 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-MEM_MASTER=2048
+MEM_MASTER=8196
 MEM_WORKER=3072
 CPU_MASTER=2
 CPU_WORKER=3
-
+OS="bento/ubuntu-22.04"
 
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 
   # Kubernetes Master Server
   config.vm.define "kmaster" do |kmaster|
-    kmaster.vm.box = "bento/ubuntu-22.04"
+    kmaster.vm.box = OS
     kmaster.vm.hostname = "kmaster.example.com"
     kmaster.vm.network "private_network", ip: "10.37.129.100"
     kmaster.vm.provider "parallels" do |v|
@@ -24,12 +24,12 @@ Vagrant.configure(2) do |config|
     kmaster.vm.provision "shell", path: "bootstrap_kmaster.sh"
   end
 
-  NodeCount = 1
+  NodeCount = 2
 
   # Kubernetes Worker Nodes
   (1..NodeCount).each do |i|
     config.vm.define "kworker#{i}" do |workernode|
-      workernode.vm.box =  "bento/ubuntu-22.04"
+      workernode.vm.box =  OS
       workernode.vm.hostname = "kworker#{i}.example.com"
       workernode.vm.network "private_network", ip: "10.37.129.10#{i}"
       workernode.vm.provider "parallels" do |v|

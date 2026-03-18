@@ -2,12 +2,11 @@
 
 # Update hosts file
 echo "[TASK 1] Update /etc/hosts file"
-cat >>/etc/hosts<<EOF
+cat >>/etc/hosts <<EOF
 10.37.129.100 kmaster.example.com kmaster
 10.37.129.101 kworker1.example.com kworker1
 10.37.129.102 kworker2.example.com kworker2
 EOF
-
 
 echo "[TASK 2] Install docker container engine"
 apt install apt-transport-https ca-certificates curl software-properties-common -y
@@ -26,12 +25,11 @@ systemctl start docker
 
 #containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 #sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
-#systemctl restart containerd 
-
+#systemctl restart containerd
 
 # Add sysctl settings
 echo "[TASK 6] Add sysctl settings"
-cat >>/etc/sysctl.d/kubernetes.conf<<EOF
+cat >>/etc/sysctl.d/kubernetes.conf <<EOF
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
@@ -46,7 +44,7 @@ swapoff -a
 echo "[TASK 8] Installing apt-transport-https pkg"
 apt update && apt install -y apt-transport-https curl gnupg ca-certificates gpg
 #curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg |   gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg 
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
 cp /etc/apt/trusted.gpg /etc/apt/trusted.gpg.d/
 apt update -y
 
@@ -85,4 +83,4 @@ echo -e "kubeadmin\nkubeadmin" | passwd root
 #echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
 
 # Update vagrant user's bashrc file
-echo "export TERM=xterm" >> /etc/bashrc
+echo "export TERM=xterm" >>/etc/bashrc
