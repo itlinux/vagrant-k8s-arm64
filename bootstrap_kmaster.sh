@@ -75,6 +75,7 @@ sudo -i -u vagrant bash <<EOF
 sudo apt -y install bash-completion 2>/dev/null || true
 echo "source <(kubectl completion bash | sed s/kubectl/k/g)" >> ~/.bashrc
 echo "alias k=kubectl" >> ~/.bashrc
+echo 'k get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d' > /home/vagrant/argo-pass-cmd
 EOF
 
 # ─────────────────────────────────────────────
@@ -94,6 +95,7 @@ helm version
 echo "[TASK 8] Adding Traefik and MetalLB Helm repos"
 su - vagrant -c "helm repo add traefik https://traefik.github.io/charts"
 su - vagrant -c "helm repo add metallb https://metallb.github.io/metallb"
+su - vagrant -c "helm repo add argo https://argoproj.github.io/argo-helm"
 su - vagrant -c "helm repo update"
 
 # ─────────────────────────────────────────────
@@ -118,6 +120,8 @@ su - vagrant -c "kubectl create secret generic -n metallb metallb-memberlist \
 
 # Install without --wait so it doesn't block on worker node scheduling
 su - vagrant -c "helm install metallb metallb/metallb -n metallb"
+su - vagrant -c "kubectl create namespace argocd"
+su - vagrant -c "helm install argocd argo/argo-cd --namespace argocd"
 
 su - vagrant -c cat <<EOF >metal-lb.yml
 ---
