@@ -1,9 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-MEM_MASTER=8196
-MEM_WORKER=3072
-CPU_MASTER=2
-CPU_WORKER=3
+MEM_MASTER=12196
+MEM_WORKER=6096
+CPU_MASTER=4
+CPU_WORKER=4
 OS="bento/ubuntu-22.04"
 
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'

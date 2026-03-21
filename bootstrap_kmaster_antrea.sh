@@ -51,17 +51,13 @@ sudo chmod 644 /vagrant/configs/config
 # ─────────────────────────────────────────────
 # TASK 4 — Deploy Antrea CNI
 # ─────────────────────────────────────────────
-echo "[TASK 4] Deploy Calico CNI"
-#echo "[TASK 4] Deploy Antrea CNI"
+echo "[TASK 4] Deploy Antrea CNI"
 echo "Waiting for API server to be ready..."
 until sudo -u vagrant kubectl get nodes &>/dev/null; do
   sleep 5
 done
-
-sudo -u vagrant kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/calico.yaml
-
-#sudo -u vagrant kubectl apply -f \
-#  https://raw.githubusercontent.com/antrea-io/antrea/main/build/yamls/antrea.yml
+sudo -u vagrant kubectl apply -f \
+  https://raw.githubusercontent.com/antrea-io/antrea/main/build/yamls/antrea.yml
 
 # ─────────────────────────────────────────────
 # TASK 5 — Generate join command
